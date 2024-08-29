@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,12 +17,12 @@
 
         <div class="row d-flex justify-content-center mt-3">
             <div class="col-4">
-                <select class="form-select" aria-label="Disabled select example" disabled>
-                    <option selected>Загружаю список почтовых адресов...</option>
+                <select id="emails" class="form-select" aria-label="Disabled select example" disabled>
+                    <option value="default" selected>Загружаю список почтовых адресов...</option>
                 </select>
             </div>
             <div class="col-2">
-                <button type="button" class="btn btn-primary" disabled>Получить письма</button>
+                <button id="load-letter" type="button" class="btn btn-primary" disabled>Получить письма</button>
             </div>
         </div>
 
@@ -62,5 +64,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'scripts.js' %}"></script>
 </body>
 </html>
