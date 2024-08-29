@@ -41,14 +41,11 @@ loadLetterButton.addEventListener('click', () => {
         return;
     }
 
-    fetch('/api/letters', {
-        method: 'POST',
+    fetch('/api/letters?email=' + email, {
+        method: 'get',
         headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            email: email
-        })
+        }
     })
         .then((response) => {
             if (!response.ok) {
