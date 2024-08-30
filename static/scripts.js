@@ -50,9 +50,11 @@ loadLetterButton.addEventListener('click', () => {
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-text');
 
-        if (data.type === 'checked') {
+        if (data.type === 'error') {
+            alert(data.message);
+        } else if (data.type === 'checked') {
             progressText.innerText = `Проверено писем: ${data.num_of_checked}`;
-        } else {
+        } else if (data.type === 'new') {
             const letters_list = document.getElementById('letters-list');
             if (!isReceivedData) {
                 letters_list.innerHTML = '';
@@ -63,26 +65,29 @@ loadLetterButton.addEventListener('click', () => {
             row.classList.add('row');
             letters_list.prepend(row);
 
-            addColumn(data.topic, row)
-            addColumn(data.message, row)
-            addColumn(data.date_of_send, row)
-            addColumn(data.date_of_receive, row)
-            addColumn(data.files, row)
+            addColumn(data.uid, row, 1)
+            addColumn(data.topic, row, 3)
+            addColumn(data.message.trim().slice(0, 200), row, 4)
+            addColumn(data.date_of_send, row, 1)
+            addColumn(data.date_of_receive, row, 1)
+            addColumn(data.files, row, 2)
 
             numOfAddedLetters++;
             const numOfAllLetters = data.num_of_letters;
-            progressBar.style.width = `${(numOfAddedLetters / numOfAllLetters) * 100}%`;
             progressText.innerText = `Добавлено писем: ${numOfAddedLetters}. Осталось: ${numOfAllLetters - numOfAddedLetters}`;
+            progressBar.style.width = `${(numOfAddedLetters / numOfAllLetters) * 100}%`;
 
             letters_list.prepend(document.createElement('hr'));
+        } else {
+            console.log(data);
+            alert('Неизвестная ошибка');
         }
     }
 });
 
-function addColumn(innerText, parentElement) {
+function addColumn(innerText, parentElement, size) {
     const childElement = document.createElement('div');
-    childElement.classList.add('col');
-    childElement.classList.add('text-truncate');
+    childElement.classList.add(`col-${size}`);
     childElement.innerText = innerText;
     parentElement.append(childElement);
 }
