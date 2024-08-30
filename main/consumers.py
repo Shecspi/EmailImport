@@ -9,15 +9,15 @@ from main.models import Email, Letter
 
 class LetterConsumer(WebsocketConsumer):
     def connect(self):
-        print("Connected")
         self.accept()
 
     def receive(self, text_data=None, bytes_data=None):
         email_instance = Email.objects.get(email=text_data)
         login = email_instance.email
         password = email_instance.password
+        imap_server = email_instance.imap_server
 
-        with MailBox("imap.yandex.ru").login(login, password) as mailbox:
+        with MailBox(imap_server).login(login, password) as mailbox:
             num_of_letters = len(mailbox.uids())
             num_of_checked = 0
             email = Email.objects.get(email=login)
@@ -44,7 +44,7 @@ class LetterConsumer(WebsocketConsumer):
                     email=email,
                     uid=msg.uid,
                     subject=msg.subject,
-                    message=msg.text,
+                    message=msg.html,
                     date_of_send=msg.date,
                 )
                 data = {
@@ -52,7 +52,7 @@ class LetterConsumer(WebsocketConsumer):
                     "num_of_letters": num_of_letters,
                     "uid": msg.uid,
                     "topic": msg.subject,
-                    "message": msg.text,
+                    "message": msg.html,
                     "date_of_send": msg.date.strftime("%d.%m.%Y"),
                     "date_of_receive": Letter.objects.last().date_of_receive.strftime(
                         "%d.%m.%Y"
