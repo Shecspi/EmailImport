@@ -335,6 +335,17 @@ files = [
 ]
 
 [[package]]
+name = "imap-tools"
+version = "1.7.2"
+description = "Work with email by IMAP"
+optional = false
+python-versions = "*"
+files = [
+    {file = "imap-tools-1.7.2.tar.gz", hash = "sha256:4c31e9df1d28149436a86871cf84a0b37221a91521fc1a57897e0a152ee3f6d1"},
+    {file = "imap_tools-1.7.2-py3-none-any.whl", hash = "sha256:218ea6495d73275ecc2fa4a34717c137bacf2c4a3d34c9d10a9581a6af1ac94f"},
+]
+
+[[package]]
 name = "incremental"
 version = "24.7.2"
 description = "A small library that versions your Python projects."
@@ -782,4 +793,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "bcfdb28455d3bd3989be41091beec64815803d38d0cae817af01f32dfb8b2665"
+content-hash = "b4ca53ff188a7009a19be07671883c5414bc53f06b22389a40d8f182e6067080"

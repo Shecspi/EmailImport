@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container ">
-        <div class="row">
+        <div class="row text-center">
             <div class="col">
                 <h1 class="display-1">Импорт писем</h1>
             </div>
@@ -28,11 +28,17 @@
 
         <div class="row mt-3">
             <div class="col">
-                <div class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="100" aria-valuemax="100" style="height: 30px;" disabled>
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%;">
-                        Выберите адрес электронной почты
+                <div class="progress" role="progressbar" style="height: 30px;" disabled>
+                    <div id="progress-bar"
+                         class="progress-bar progress-bar-striped progress-bar-animated"
+                         style="width: 100%;">
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="progress-text" class="text-center"></div>
             </div>
         </div>
 

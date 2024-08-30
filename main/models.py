@@ -10,12 +10,15 @@ class Email(models.Model):
 
 
 class Letter(models.Model):
-    email = models.ForeignKey(Email, on_delete=models.CASCADE)
-    topic = models.CharField(null=False, blank=False)
-    message = models.CharField(null=False, blank=False)
+    email = models.ForeignKey(Email, on_delete=models.CASCADE, null=False, blank=False)
+    uid = models.IntegerField(null=False, blank=False)
+    subject = models.CharField()
+    message = models.CharField()
     date_of_send = models.DateTimeField()
-    date_of_receive = models.DateTimeField()
-    files = models.CharField(null=True, blank=True)
+    date_of_receive = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.topic
+        return self.subject
+
+    class Meta:
+        unique_together = ("uid", "email")

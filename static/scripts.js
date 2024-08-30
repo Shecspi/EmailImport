@@ -1,5 +1,6 @@
 const emailsSelect = document.getElementById('emails');
 const loadLetterButton = document.getElementById('load-letter');
+let numOfAddedLetters = 0;
 
 function updateEmailsSelect(data) {
     emailsSelect.innerHTML = '';
@@ -46,41 +47,42 @@ loadLetterButton.addEventListener('click', () => {
     // Обрабатываем полученные данные
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
 
-        const letters_list = document.getElementById('letters-list');
-        if (!isReceivedData) {
-            letters_list.innerHTML = '';
-            isReceivedData = true;
+        if (data.type === 'checked') {
+            progressText.innerText = `Проверено писем: ${data.num_of_checked}`;
+        } else {
+            const letters_list = document.getElementById('letters-list');
+            if (!isReceivedData) {
+                letters_list.innerHTML = '';
+                isReceivedData = true;
+            }
+
+            const row = document.createElement('div');
+            row.classList.add('row');
+            letters_list.prepend(row);
+
+            addColumn(data.topic, row)
+            addColumn(data.message, row)
+            addColumn(data.date_of_send, row)
+            addColumn(data.date_of_receive, row)
+            addColumn(data.files, row)
+
+            numOfAddedLetters++;
+            const numOfAllLetters = data.num_of_letters;
+            progressBar.style.width = `${(numOfAddedLetters / numOfAllLetters) * 100}%`;
+            progressText.innerText = `Добавлено писем: ${numOfAddedLetters}. Осталось: ${numOfAllLetters - numOfAddedLetters}`;
+
+            letters_list.prepend(document.createElement('hr'));
         }
-
-        const row = document.createElement('div');
-        row.classList.add('row');
-        letters_list.appendChild(row);
-
-        const topicCol = document.createElement('div');
-        topicCol.classList.add('col-auto');
-        topicCol.innerText = data.topic;
-        row.appendChild(topicCol);
-
-        const topicMessage = document.createElement('div');
-        topicMessage.classList.add('col-auto');
-        topicMessage.classList.add('text-truncate');
-        topicMessage.innerText = data.message;
-        row.appendChild(topicMessage);
-
-        const topicDateOfSend = document.createElement('div');
-        topicDateOfSend.classList.add('col-auto');
-        topicDateOfSend.innerText = data.date_of_send;
-        row.appendChild(topicDateOfSend);
-
-        const topicOfRecieve = document.createElement('div');
-        topicOfRecieve.classList.add('col-auto');
-        topicOfRecieve.innerText = data.date_of_receive;
-        row.appendChild(topicOfRecieve);
-
-        const topicFiles = document.createElement('div');
-        topicFiles.classList.add('col-auto');
-        topicFiles.innerText = data.files;
-        row.appendChild(topicFiles);
     }
 });
+
+function addColumn(innerText, parentElement) {
+    const childElement = document.createElement('div');
+    childElement.classList.add('col');
+    childElement.classList.add('text-truncate');
+    childElement.innerText = innerText;
+    parentElement.append(childElement);
+}
