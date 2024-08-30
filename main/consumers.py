@@ -53,8 +53,10 @@ class LetterConsumer(WebsocketConsumer):
                     "uid": msg.uid,
                     "topic": msg.subject,
                     "message": msg.text,
-                    "date_of_send": "2024-01-01",
-                    "date_of_receive": "2024-01-01",
+                    "date_of_send": msg.date.strftime("%d.%m.%Y"),
+                    "date_of_receive": Letter.objects.last().date_of_receive.strftime(
+                        "%d.%m.%Y"
+                    ),
                     "files": [att.filename for att in msg.attachments],
                 }
                 self.send(json.dumps(data))
