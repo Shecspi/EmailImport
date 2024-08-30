@@ -35,28 +35,52 @@ let response = fetch('/api/emails', {
     });
 
 loadLetterButton.addEventListener('click', () => {
-    const email = emailsSelect.value;
-    if (email === 'default') {
-        alert('Выберите адрес электронной почты');
-        return;
+    let socket = new WebSocket('ws://localhost:8000/ws/letters');
+    let isReceivedData = false;
+
+    // Отправляем в сокет адрес электронной почты, по которому нужно получить список писем
+    socket.onopen = () => {
+        socket.send(emailsSelect.value);
     }
 
-    fetch('/api/letters?email=' + email, {
-        method: 'get',
-        headers: {
-            'Content-Type': 'application/json'
+    // Обрабатываем полученные данные
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        const letters_list = document.getElementById('letters-list');
+        if (!isReceivedData) {
+            letters_list.innerHTML = '';
+            isReceivedData = true;
         }
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(response.statusText)
-            }
-            return response.json();
-        })
-        .then((data) => {
-            console.log(data);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+
+        const row = document.createElement('div');
+        row.classList.add('row');
+        letters_list.appendChild(row);
+
+        const topicCol = document.createElement('div');
+        topicCol.classList.add('col-auto');
+        topicCol.innerText = data.topic;
+        row.appendChild(topicCol);
+
+        const topicMessage = document.createElement('div');
+        topicMessage.classList.add('col-auto');
+        topicMessage.classList.add('text-truncate');
+        topicMessage.innerText = data.message;
+        row.appendChild(topicMessage);
+
+        const topicDateOfSend = document.createElement('div');
+        topicDateOfSend.classList.add('col-auto');
+        topicDateOfSend.innerText = data.date_of_send;
+        row.appendChild(topicDateOfSend);
+
+        const topicOfRecieve = document.createElement('div');
+        topicOfRecieve.classList.add('col-auto');
+        topicOfRecieve.innerText = data.date_of_receive;
+        row.appendChild(topicOfRecieve);
+
+        const topicFiles = document.createElement('div');
+        topicFiles.classList.add('col-auto');
+        topicFiles.innerText = data.files;
+        row.appendChild(topicFiles);
+    }
 });

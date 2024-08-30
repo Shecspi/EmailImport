@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "daphne",
     "django.contrib.staticfiles",
     "rest_framework",
+    "channels",
     "main",
 ]
 
@@ -71,6 +73,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "EmailImport.wsgi.application"
+ASGI_APPLICATION = "EmailImport.asgi.application"
 
 
 # Database
@@ -84,6 +87,15 @@ DATABASES = {
         "PASSWORD": "password",
         "HOST": "127.0.0.1",
         "PORT": "5432",
+    }
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
     }
 }
 
