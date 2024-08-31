@@ -19,7 +19,7 @@ poetry install
 ```
 4. Сделать миграции
 ```sh
-poetry run python manage.py makemigrations
+poetry run python manage.py makemigrations main
 poetry run python manage.py migrate
 ```
 5. В базе данных в таблицу Email внести один или более email-адресов, с которых нужно получить список писем. Помимо адреса нужно указать пароль и IMAP-сервер.
