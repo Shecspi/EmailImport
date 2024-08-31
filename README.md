@@ -25,5 +25,5 @@ poetry run python manage.py migrate
 5. В базе данных в таблицу Email внести один или более email-адресов, с которых нужно получить список писем. Помимо адреса нужно указать пароль и IMAP-сервер.
 5. Запустить сервер
 ```sh
-poetry run python manage.py manage.py runserver
+poetry run python manage.py runserver
 ```
