@@ -2,6 +2,13 @@ const emailsSelect = document.getElementById('emails');
 const loadLetterButton = document.getElementById('load-letter');
 let numOfAddedLetters = 0;
 
+function addColumn(innerText, parentElement, size) {
+    const childElement = document.createElement('div');
+    childElement.classList.add(`col-${size}`);
+    childElement.innerText = innerText;
+    parentElement.append(childElement);
+}
+
 function updateEmailsSelect(data) {
     emailsSelect.innerHTML = '';
 
@@ -22,6 +29,7 @@ function updateEmailsSelect(data) {
     loadLetterButton.disabled = false;
 }
 
+// Загрузка списка адресов электронной почты
 let response = fetch('/api/emails', {
     method: 'GET'
 })
@@ -55,6 +63,7 @@ loadLetterButton.addEventListener('click', () => {
         } else if (data.type === 'checked') {
             progressText.innerText = `Проверено писем: ${data.num_of_checked}`;
         } else if (data.type === 'new') {
+            // Обновляем список писем
             const letters_list = document.getElementById('letters-list');
             if (!isReceivedData) {
                 letters_list.innerHTML = '';
@@ -72,6 +81,7 @@ loadLetterButton.addEventListener('click', () => {
             addColumn(data.date_of_receive, row, 1)
             addColumn(data.files, row, 2)
 
+            // Изменяем количество добавленных писем и прогресс-бар
             numOfAddedLetters++;
             const numOfAllLetters = data.num_of_letters;
             progressText.innerText = `Добавлено писем: ${numOfAddedLetters}. Осталось: ${numOfAllLetters - numOfAddedLetters}`;
@@ -84,10 +94,3 @@ loadLetterButton.addEventListener('click', () => {
         }
     }
 });
-
-function addColumn(innerText, parentElement, size) {
-    const childElement = document.createElement('div');
-    childElement.classList.add(`col-${size}`);
-    childElement.innerText = innerText;
-    parentElement.append(childElement);
-}
